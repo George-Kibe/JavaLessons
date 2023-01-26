@@ -9,13 +9,13 @@ import Banner3 from "../../BannerImages/Banner3.jpg"
 import Banner4 from "../../BannerImages/Banner4.jpg"
 import Banner5 from "../../BannerImages/Banner5.jpg"
 import Banner6 from "../../BannerImages/Banner6.jpg"
-
+import BackToTop from '../../components/BackToTop/BackToTop'
 import "./Home.css" 
 
 const Home = () => {
   const bannerImages = [Banner1, Banner2, Banner3, Banner4, Banner5, Banner6]
   return (
-    <>
+    <div>
       <Header />
       <div className="item-container">
         {headerItems && headerItems.map((item, index) => <p>{item}</p>)}
@@ -65,12 +65,12 @@ const Home = () => {
               />
             ))}
           </div>
-          <div className="button">
-
+          <div style={{marginTop:"40px"}}>
+            <BackToTop />
           </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 
