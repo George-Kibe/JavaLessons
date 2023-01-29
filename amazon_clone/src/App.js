@@ -4,7 +4,7 @@ import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 
-//continue from 1:33:50 npm install firebase  https://www.youtube.com/watch?v=AJmqb_Q3ojA
+//continue from 1:33:50 https://www.youtube.com/watch?v=AJmqb_Q3ojA
 
 
 function App() {
