@@ -1,15 +1,22 @@
 import React, {useState} from 'react'
 import { Link } from 'react-router-dom'
 import AmazonLogo from "../../Amazon_Logo.png"
+import { useSelector, useDispatch } from 'react-redux'
+import { registerInitiate } from '../../redux/actions'
 
 import "./Register.css"
 
 const Register = () => {
+  const dispatch = useDispatch()
+
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
   const register = (e) => {
     e.preventDefault()
+    dispatch(registerInitiate(email, password));
+    setEmail("")
+    setPassword("")
   }
 
   return (
