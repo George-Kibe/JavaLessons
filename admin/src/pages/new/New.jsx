@@ -73,7 +73,8 @@ const New = ({ inputs, title }) => {
         ...data,
         timeStamp: serverTimestamp()
       }) 
-      console.log(response)
+      // console.log(response)
+      navigate(-1)
     } catch (error) {
       console.log(error.message)
     }
