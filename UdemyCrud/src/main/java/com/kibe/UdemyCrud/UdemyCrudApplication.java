@@ -18,8 +18,8 @@ public class UdemyCrudApplication {
 	@Bean
 	public CommandLineRunner commandLineRunner(StudentDAO studentDAO){
 		return runner -> {
-			// System.out.println("Hello from runner");
-			createStudent(studentDAO);
+			System.out.println("Hello from runner");
+			// createStudent(studentDAO);
 			// getStudent(studentDAO);
 			// getAllStudents(studentDAO);
 			// getStudentsByLastName(studentDAO);
