@@ -9,30 +9,29 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+
+import javax.sql.DataSource;
 
 @Configuration
 public class DemoSecurityConfig {
+    // Add support for JDBC instead of hardcoded users
     @Bean
-    public InMemoryUserDetailsManager userDetailsManager(){
-        UserDetails john = User.builder()
-                .username("John")
-                .password("{noop}test1234")
-                .roles("EMPLOYEE")
-                .build();
-        UserDetails george = User.builder()
-                .username("George")
-                .password("{noop}test1234")
-                .roles("EMPLOYEE", "MANAGER")
-                .build();
-        UserDetails kibe = User.builder()
-                .username("Kibe")
-                .password("{noop}test1234")
-                .roles("EMPLOYEE", "MANAGER", "ADMIN")
-                .build();
-        
-        return new InMemoryUserDetailsManager(john, george, kibe);
+    public UserDetailsManager userDetailsManager(DataSource dataSource){
+        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
+        // define query to retrieve  a user by username
+        jdbcUserDetailsManager.setUsersByUsernameQuery(
+                "select user_id, pw, active from members where user_id=?"
+        );
+        // define aa query to retrieve roles by username
+        jdbcUserDetailsManager.setAuthoritiesByUsernameQuery(
+                "select user_id, role from roles where user_id=?"
+        );
+        return jdbcUserDetailsManager;
     }
+
     // Restrict URL access based on roles
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
@@ -53,4 +52,26 @@ public class DemoSecurityConfig {
 
         return  http.build();
     }
+    /*
+    @Bean
+    public InMemoryUserDetailsManager userDetailsManager(){
+        UserDetails john = User.builder()
+                .username("John")
+                .password("{noop}test1234")
+                .roles("EMPLOYEE")
+                .build();
+        UserDetails george = User.builder()
+                .username("George")
+                .password("{noop}test1234")
+                .roles("EMPLOYEE", "MANAGER")
+                .build();
+        UserDetails kibe = User.builder()
+                .username("Kibe")
+                .password("{noop}test1234")
+                .roles("EMPLOYEE", "MANAGER", "ADMIN")
+                .build();
+
+        return new InMemoryUserDetailsManager(john, george, kibe);
+    }
+     */
 }
