@@ -1,0 +1,11 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>Thymeleaf Demo</title>
+    <link rel="stylesheet" th:href="@{/css/demo.css}" />
+</head>
+<body>
+    <p th:text="'Time on the server is ' + ${theDate}" class="funny" />
+</body>
+</html>

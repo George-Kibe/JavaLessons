@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import javax.sql.DataSource;
 
 @Configuration
+@EnableWebSecurity
 public class DemoSecurityConfig {
     // Add support for JDBC instead of hardcoded users
     @Bean
@@ -42,6 +44,7 @@ public class DemoSecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/rest/members").hasRole("MANAGER")
                         .requestMatchers(HttpMethod.PUT, "/rest/members/**").hasRole("MANAGER")
                         .requestMatchers(HttpMethod.DELETE, "/rest/members/**").hasRole("ADMIN")
+                        .anyRequest().permitAll()  // Allows access to any other request
                 );
         // use HTTP Basic authentication that uses username and password
         http.httpBasic(Customizer.withDefaults());
