@@ -1,10 +1,7 @@
 package com.kibe.udemyAdvanced;
 
 import com.kibe.udemyAdvanced.dao.AppDAO;
-import com.kibe.udemyAdvanced.entity.Course;
-import com.kibe.udemyAdvanced.entity.Instructor;
-import com.kibe.udemyAdvanced.entity.InstructorDetail;
-import com.kibe.udemyAdvanced.entity.Review;
+import com.kibe.udemyAdvanced.entity.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -35,10 +32,68 @@ public class UdemyAdvancedApplication {
 			// deleteCourse(appDAO);
 			// createCourseAndReviews(appDAO);
 			// retrieveCourseAndReviews(appDAO);
-			deleteCourseAndReviews(appDAO);
-
+			// deleteCourseAndReviews(appDAO);
+			// createCourseAndStudents(appDAO);
+			// findCourseAndStudents(appDAO);
+			// findStudentAndCourses(appDAO);
+			// addMoreCoursesForStudent(appDAO);
+			deleteStudent(appDAO);
 			// System.out.println("Hello world from Command Line Runner");
 		};
+	}
+
+	private void deleteStudent(AppDAO appDAO) {
+		int theId = 2;
+		System.out.println("Deleting student of id: "+ theId);
+		appDAO.deleteStudentById(theId);
+		System.out.println("Done!");
+	}
+
+	private void addMoreCoursesForStudent(AppDAO appDAO) {
+		int theId = 2;
+		Student tempStudent = appDAO.findStudentAndCoursesByStudentId(theId);
+		// create more courses
+		Course tempCourse1 = new Course("Spring Boot for Web dev");
+		Course tempCourse2 = new Course("Django rest framework");
+		// add courses to student
+		tempStudent.addCourse(tempCourse1);
+		tempStudent.addCourse(tempCourse2);
+		System.out.println("Updating Student: " + tempStudent);
+		System.out.println(" Associated courses: " + tempStudent.getCourses());
+
+		appDAO.updateStudent(tempStudent);
+		System.out.println("Done!");
+	}
+	private void findStudentAndCourses(AppDAO appDAO) {
+		int theId = 1;
+		Student tempStudent = appDAO.findStudentAndCoursesByStudentId(theId);
+		System.out.println("Loaded Student: " + tempStudent);
+		System.out.println("Associated courses: " +tempStudent.getCourses());
+		System.out.println("Done!");
+	}
+
+	private void findCourseAndStudents(AppDAO appDAO) {
+		int theId = 10;
+		Course tempCourse = appDAO.findCourseAndStudentsByCourseId(theId);
+		System.out.println("Loaded Course: " + tempCourse);
+		System.out.println("Students: "+ tempCourse.getStudents());
+		System.out.println("Done!");
+	}
+
+	private void createCourseAndStudents(AppDAO appDAO) {
+		// create a course
+		Course tempCourse = new Course("Django for dummies 20224");
+		// create the students
+		Student tempStudent1 = new Student("KifeeGeorge", "Test2024", "georgekifee@gmail.com");
+		Student tempStudent2 = new Student("GeorgeKifeee", "Wambui", "georgekifee@gmail.com");
+		// add students to the course
+		tempCourse.addStudent(tempStudent1);
+		tempCourse.addStudent(tempStudent2);
+		// save course and associated students
+		System.out.println("Saving the course: " + tempCourse);
+		System.out.println("Associated Students: " +tempCourse.getStudents());
+		appDAO.saveCourse(tempCourse);
+		System.out.println("Course and Associated students saved successfully!");
 	}
 
 	private void deleteCourseAndReviews(AppDAO appDAO) {
@@ -71,7 +126,7 @@ public class UdemyAdvancedApplication {
 	}
 
 	private void deleteCourse(AppDAO appDAO) {
-		int theId = 10;
+		int theId = 13;
 		System.out.println("Deleting course of id: "+ theId);
 		appDAO.deleteCourseById(theId);
 		System.out.println("Done");

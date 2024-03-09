@@ -3,6 +3,7 @@ package com.kibe.udemyAdvanced.dao;
 import com.kibe.udemyAdvanced.entity.Course;
 import com.kibe.udemyAdvanced.entity.Instructor;
 import com.kibe.udemyAdvanced.entity.InstructorDetail;
+import com.kibe.udemyAdvanced.entity.Student;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -130,5 +131,46 @@ public class AppDAOImpl implements AppDAO{
         // execute query
         Course course = query.getSingleResult();
         return course;
+    }
+
+    @Override
+    public Course findCourseAndStudentsByCourseId(int theId) {
+        // create query
+        TypedQuery<Course> query = entityManager.createQuery(
+                "select c from Course c "
+                        + "JOIN FETCH c.students "
+                        + "where c.id = :data", Course.class
+        );
+        query.setParameter("data", theId);
+        // execute query
+        return query.getSingleResult();
+    }
+
+    @Override
+    public Student findStudentAndCoursesByStudentId(int theId) {
+        // create query
+        TypedQuery<Student> query = entityManager.createQuery(
+                "select s from Student s "
+                        + "JOIN FETCH s.courses "
+                        + "where s.id = :data", Student.class
+        );
+        query.setParameter("data", theId);
+        // execute query
+        return query.getSingleResult();
+    }
+
+    @Override
+    @Transactional
+    public void updateStudent(Student tempStudent) {
+        entityManager.merge(tempStudent);
+    }
+
+    @Override
+    @Transactional
+    public void deleteStudentById(int theId) {
+        // get the student
+        Student tempStudent = entityManager.find(Student.class, theId);
+        // delete the student
+        entityManager.remove(tempStudent);
     }
 }
