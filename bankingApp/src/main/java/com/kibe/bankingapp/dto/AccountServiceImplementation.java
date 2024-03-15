@@ -6,6 +6,9 @@ import com.kibe.bankingapp.repository.AccountRepository;
 import com.kibe.bankingapp.services.AccountService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class AccountServiceImplementation implements AccountService {
     private AccountRepository accountRepository;
@@ -41,5 +44,37 @@ public class AccountServiceImplementation implements AccountService {
             return AccountMapper.mapToAccountDTO(savedAccount);
         }
         return null;
+    }
+
+    @Override
+    public AccountDTO withdrawFromAccount(Long id, double amount) {
+        Account account = accountRepository.findById(id).orElse(null);
+        if (account != null){
+            if(account.getBalance() < amount){
+                throw new RuntimeException("Insufficient Amount");
+            }
+            double total = account.getBalance() - amount;
+            account.setBalance(total);
+            Account savedAccount = accountRepository.save(account);
+            return AccountMapper.mapToAccountDTO(savedAccount);
+        }
+        return null;
+    }
+
+    @Override
+    public List<AccountDTO> getAllAccounts() {
+        List<Account> accounts = accountRepository.findAll();
+        return accounts.stream().map(AccountMapper::mapToAccountDTO).collect(Collectors.toList());
+        // return accounts.stream().map((account) -> AccountMapper.mapToAccountDTO(account)).collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean deleteAccount(Long id) {
+        Account account = accountRepository.findById(id).orElse(null);
+        if (account !=null){
+            accountRepository.deleteById(id);
+            return  true;
+        }
+        return false;
     }
 }
